@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>01_要件定義書.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%E7%BE%8E%E5%AE%B9%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E5%8B%95%E7%94%BB%E5%AD%A6%E7%BF%92%E3%82%B5%E3%82%A4%E3%83%88-%E8%A6%81%E4%BB%B6%E5%AE%9A%E7%BE%A9%E6%9B%B8">美容オンライン動画学習サイト 要件定義書</h1>
+<p>バージョン：1.0
+作成日：2025/11/14</p>
+<hr>
+<h2 id="0-%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88%E6%83%85%E5%A0%B1">0. ドキュメント情報</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ドキュメント名</td>
+<td>美容オンライン動画学習サイト 要件定義書</td>
+</tr>
+<tr>
+<td>バージョン</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>作成日</td>
+<td>2025/11/14</td>
+</tr>
+<tr>
+<td>作成者</td>
+<td>ーーー</td>
+</tr>
+<tr>
+<td>承認者</td>
+<td>ーーー</td>
+</tr>
+<tr>
+<td>関連文書</td>
+<td>基本設計書、詳細設計書、提案書、見積書、WBS 等</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="1-%E8%83%8C%E6%99%AF%E3%83%BB%E7%9B%AE%E7%9A%84">1. 背景・目的</h2>
+<h3 id="11-%E8%83%8C%E6%99%AF">1.1 背景</h3>
+<p>美容領域（メイク・スキンケア等）において、オンライン講座需要が高まっている一方、
+既存プラットフォームは <strong>高額講座の販売・講師ブランディング・体系的なコース提供</strong> が不向きである。
+本プロジェクトでは、講師のブランド価値を生かしながら <strong>講座体系・講師紹介・動画販売・コース販売</strong> に最適化した学習サイトを構築する。</p>
+<h3 id="12-%E7%9B%AE%E7%9A%84">1.2 目的</h3>
+<ul>
+<li>高額講座・動画の<strong>オンライン販売基盤</strong>を構築する</li>
+<li><strong>会員登録 → 決済 → 視聴権付与 → 動画視聴</strong>まで一連のUXを提供</li>
+<li>美容スクールにふさわしい <strong>上質で信頼性のあるデザイン</strong> を提供</li>
+<li>将来的に講師数・講座数が増えても運用できるデータ構造を採用</li>
+</ul>
+<hr>
+<h2 id="2-%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97">2. スコープ</h2>
+<h3 id="21-%E5%AF%BE%E8%B1%A1%E6%A5%AD%E5%8B%99">2.1 対象業務</h3>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>業務内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>事務局</td>
+<td>講座管理、講師管理、受講者ステータス管理、動画アップロード</td>
+</tr>
+<tr>
+<td>一般ユーザー</td>
+<td>会員登録、ログイン、動画購入、講座受講、プロフィール閲覧</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-%E5%AF%BE%E8%B1%A1%E5%A4%96">2.2 対象外</h3>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>集客業務</td>
+<td>SNS広告・LINE集客などは対象外（別業務）</td>
+</tr>
+<tr>
+<td>経理業務</td>
+<td>会計処理・税計算などは行わない</td>
+</tr>
+<tr>
+<td>オフライン講義管理</td>
+<td>対面講座管理は対象外</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-%E5%AF%BE%E8%B1%A1%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0">2.3 対象システム</h3>
+<ul>
+<li>Webアプリ（スマホファースト）</li>
+<li>API（FastAPI）</li>
+<li>管理画面（最低限）</li>
+<li>DB（PostgreSQL）</li>
+<li>動画配信（ストリーミング前提／ダウンロード禁止）</li>
+</ul>
+<hr>
+<h2 id="3-%E5%88%A9%E7%94%A8%E8%80%85%E8%A6%81%E4%BB%B6">3. 利用者要件</h2>
+<h3 id="31-%E5%88%A9%E7%94%A8%E8%80%85%E5%8C%BA%E5%88%86">3.1 利用者区分</h3>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>説明</th>
+<th>主な操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一般ユーザー</td>
+<td>講座・動画を購入する受講者</td>
+<td>会員登録、購入、視聴</td>
+</tr>
+<tr>
+<td>講師</td>
+<td>自身の講座の管理</td>
+<td>プロフィール、講座管理</td>
+</tr>
+<tr>
+<td>管理者</td>
+<td>事務局</td>
+<td>すべての管理作業</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-%E5%88%A9%E7%94%A8%E3%82%B7%E3%83%8A%E3%83%AA%E3%82%AA">3.2 利用シナリオ</h3>
+<ul>
+<li>会員登録 → ログイン → 講座を閲覧 → 動画またはコースを購入 → 視聴権が付与される</li>
+<li>無料体験動画 → 興味 → 講座購入</li>
+<li>講師一覧 → 講師プロフィール確認 → コース選択</li>
+</ul>
+<hr>
+<h2 id="4-%E6%A9%9F%E8%83%BD%E8%A6%81%E4%BB%B6">4. 機能要件</h2>
+<h3 id="41-%E6%A9%9F%E8%83%BD%E4%B8%80%E8%A6%A7">4.1 機能一覧</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>機能名</th>
+<th>内容</th>
+<th>優先度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F001</td>
+<td>会員登録</td>
+<td>メール＋パスワード登録</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F002</td>
+<td>ログイン</td>
+<td>JWT認証</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F003</td>
+<td>動画購入</td>
+<td>単品またはコース販売</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F004</td>
+<td>決済機能</td>
+<td>クレジットカード決済（Square等）</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F005</td>
+<td>視聴権限管理</td>
+<td>購入済みユーザーのみ動画視聴可</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F006</td>
+<td>動画視聴</td>
+<td>ストリーミング再生（DL禁止）</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F007</td>
+<td>講座詳細</td>
+<td>講座の内容・価格・講師表示</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F008</td>
+<td>講師プロフィール</td>
+<td>講師紹介、価格表示、動画一覧</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F009</td>
+<td>ホーム画面</td>
+<td>講座一覧・魅力紹介・講師紹介</td>
+<td>A</td>
+</tr>
+<tr>
+<td>F010</td>
+<td>問い合わせ（LINE誘導）</td>
+<td>LINEリンク誘導</td>
+<td>B</td>
+</tr>
+<tr>
+<td>F011</td>
+<td>管理画面</td>
+<td>講座管理、動画管理、ユーザー状態確認</td>
+<td>B</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-%E9%9D%9E%E6%A9%9F%E8%83%BD%E8%A6%81%E4%BB%B6">5. 非機能要件</h2>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>要件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ストリーミング</td>
+<td>HLS/MP4、右クリック禁止、DL禁止、スクショ防止（JSベース）</td>
+</tr>
+<tr>
+<td>セキュリティ</td>
+<td>JWT、HTTPS、動画URL署名（期限付き）</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>動画読み込み3秒以内（推奨）</td>
+</tr>
+<tr>
+<td>保守性</td>
+<td>データ構造を講座数増加に耐える設計</td>
+</tr>
+<tr>
+<td>運用性</td>
+<td>管理画面で基本情報を更新可能</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="6-%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E6%A7%8B%E6%88%90%E8%A6%81%E4%BB%B6">6. システム構成要件</h2>
+<ul>
+<li><strong>Web</strong>：Nginx</li>
+<li><strong>App</strong>：FastAPI (Python)</li>
+<li><strong>DB</strong>：PostgreSQL</li>
+<li><strong>キャッシュ</strong>：Redis</li>
+<li><strong>ストレージ</strong>：Cloud Storage / S3</li>
+<li><strong>動画配信</strong>：署名付きURL＋ストリーミング</li>
+<li><strong>構成図（Mermaid）</strong></li>
+</ul>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+  U[ユーザー] -->|HTTPS| Nginx
+  Nginx --> App[FastAPI]
+  App --> DB[(PostgreSQL)]
+  App --> Cache[(Redis)]
+  App --> Storage[(動画ストレージ)]
+</div></code></pre>
+<hr>
+<h2 id="7-%E7%94%BB%E9%9D%A2%E4%B8%80%E8%A6%A7mvp%E7%89%88">7. 画面一覧（MVP版）</h2>
+<table>
+<thead>
+<tr>
+<th>画面</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ホーム（TOP）</td>
+<td>講座紹介・講師紹介・無料体験導線</td>
+</tr>
+<tr>
+<td>講座一覧</td>
+<td>コースと動画の一覧表示</td>
+</tr>
+<tr>
+<td>講座詳細</td>
+<td>価格・内容・講師情報</td>
+</tr>
+<tr>
+<td>講師一覧</td>
+<td>講師写真と価格帯表示</td>
+</tr>
+<tr>
+<td>講師プロフィール</td>
+<td>プロフィール／経歴／講座一覧</td>
+</tr>
+<tr>
+<td>会員登録</td>
+<td>メール＋PW登録</td>
+</tr>
+<tr>
+<td>ログイン</td>
+<td>JWTログイン</td>
+</tr>
+<tr>
+<td>マイページ</td>
+<td>購入済み講座一覧／視聴開始</td>
+</tr>
+<tr>
+<td>動画視聴ページ</td>
+<td>ストリーミング再生</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-%E3%83%87%E3%83%BC%E3%82%BF%E8%A6%81%E4%BB%B6%E5%85%A8%E9%87%8F">8. データ要件（全量）</h2>
+<h3 id="81-%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%E4%B8%80%E8%A6%A7">8.1 テーブル一覧</h3>
+<table>
+<thead>
+<tr>
+<th>テーブル</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>users</td>
+<td>会員情報</td>
+</tr>
+<tr>
+<td>instructors</td>
+<td>講師情報</td>
+</tr>
+<tr>
+<td>courses</td>
+<td>コース（複数動画で構成）</td>
+</tr>
+<tr>
+<td>videos</td>
+<td>単体動画</td>
+</tr>
+<tr>
+<td>course_items</td>
+<td>コース内の動画構成</td>
+</tr>
+<tr>
+<td>products</td>
+<td>販売商品（動画・コース）</td>
+</tr>
+<tr>
+<td>price</td>
+<td>価格</td>
+</tr>
+<tr>
+<td>orders</td>
+<td>注文</td>
+</tr>
+<tr>
+<td>order_items</td>
+<td>注文明細</td>
+</tr>
+<tr>
+<td>entitlements</td>
+<td>視聴権限</td>
+</tr>
+<tr>
+<td>playback_log</td>
+<td>視聴ログ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-%E9%96%A2%E4%BF%82%E5%9B%B3mermaid%EF%BC%8F%E6%97%A5%E6%9C%AC%E8%AA%9E">8.2 関係図（Mermaid／日本語）</h3>
+<pre><code class="language-mermaid"><div class="mermaid">erDiagram
+  ユーザー ||--o{ 注文 : 購入する
+  注文 ||--o{ 注文明細 : 含む
+  ユーザー ||--o{ 受講権限 : 所有する
+  受講権限 }o--|| 商品 : 対応する
+  商品 ||--o{ 価格 : 設定する
+  商品 ||--o{ コース構成 : 含む
+  コース構成 ||--|| 動画 : 参照する
+  ユーザー ||--o{ 視聴ログ : 記録する
+  視聴ログ }o--|| 動画 : 視聴対象
+</div></code></pre>
+<hr>
+<h2 id="9-%E9%81%8B%E7%94%A8%E8%A6%81%E4%BB%B6">9. 運用要件</h2>
+<ul>
+<li>毎日バックアップ</li>
+<li>動画URLは7日で失効</li>
+<li>操作ログ90日保持</li>
+<li>管理者は講座の公開/非公開を切替可能</li>
+</ul>
+<hr>
+<h2 id="10-%E5%88%B6%E7%B4%84%E3%83%BB%E3%83%AA%E3%82%B9%E3%82%AF">10. 制約・リスク</h2>
+<table>
+<thead>
+<tr>
+<th>リスク</th>
+<th>内容</th>
+<th>対策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>動画の不正ダウンロード</td>
+<td>録画・キャプチャされうる</td>
+<td>透かし・JS検知・DRM検討</td>
+</tr>
+<tr>
+<td>高額商材のため返金トラブル</td>
+<td>決済後のサポートが重要</td>
+<td>返金規約を明記</td>
+</tr>
+<tr>
+<td>サーバ負荷</td>
+<td>動画配信で高負荷</td>
+<td>CDN導入余地を確保</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>
