@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ショートカット設計の基礎と応用｜講座詳細 | 美容オンラインアカデミー</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --color-bg: #f7f7fb;
+      --color-surface: #ffffff;
+      --color-primary: #e91e63;
+      --color-primary-dark: #c2185b;
+      --color-text: #333333;
+      --color-muted: #777777;
+      --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --radius-lg: 12px;
+      --radius-full: 999px;
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .page-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* 共通ヘッダー（LAYOUT002） */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .service-name {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-link {
+      color: var(--color-muted);
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid transparent;
+      font-size: 13px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--color-text);
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease, transform 0.05s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-secondary {
+      border-color: #dddddd;
+      background: #ffffff;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+    }
+
+    .btn-muted {
+      border-color: #e0e0e7;
+      background: #f5f5fa;
+      color: var(--color-muted);
+      font-size: 12px;
+      padding: 6px 10px;
+    }
+
+    .nav-toggle {
+      display: none;
+      border: none;
+      background: transparent;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      width: 20px;
+      height: 2px;
+      background: var(--color-text);
+      position: relative;
+    }
+
+    .nav-toggle span::before,
+    .nav-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 20px;
+      height: 2px;
+      background: var(--color-text);
+    }
+
+    .nav-toggle span::before {
+      top: -6px;
+    }
+
+    .nav-toggle span::after {
+      top: 6px;
+    }
+
+    /* パンくず */
+
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--color-muted);
+      padding-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    .breadcrumb a {
+      color: var(--color-muted);
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .breadcrumb-sep {
+      margin: 0 4px;
+    }
+
+    /* 講座詳細レイアウト */
+
+    .course-detail {
+      padding: 8px 0 32px;
+    }
+
+    .course-detail-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .course-main {
+      background: var(--color-surface);
+      border-radius: 20px;
+      padding: 20px 20px 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .course-meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid #e0e0e7;
+      font-size: 11px;
+      background: #fafafe;
+    }
+
+    .tag-level {
+      border-color: #ffd5e6;
+      background: #fff0f6;
+      color: var(--color-primary-dark);
+    }
+
+    .course-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .course-subtitle {
+      font-size: 13px;
+      color: var(--color-muted);
+      margin-bottom: 16px;
+    }
+
+    .section-block {
+      margin-bottom: 16px;
+    }
+
+    .section-block-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .section-block-body {
+      font-size: 13px;
+      color: var(--color-text);
+    }
+
+    .section-block-body p {
+      margin: 0 0 8px;
+    }
+
+    .section-block-body ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+    }
+
+    .section-block-body li + li {
+      margin-top: 3px;
+    }
+
+    .label-inline {
+      font-size: 12px;
+      color: var(--color-muted);
+      margin-bottom: 2px;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: #f5f5fa;
+      color: var(--color-muted);
+    }
+
+    /* 購入ボックス */
+
+    .course-aside {
+      position: sticky;
+      top: 80px;
+    }
+
+    .purchase-box {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid #f0f0f5;
+      font-size: 13px;
+    }
+
+    .purchase-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .purchase-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+    }
+
+    .purchase-tax {
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+
+    .purchase-meta {
+      display: grid;
+      grid-template-columns: 1.1fr 1.1fr;
+      gap: 4px 12px;
+      font-size: 11px;
+      color: var(--color-muted);
+      margin-bottom: 10px;
+    }
+
+    .purchase-meta-label {
+      color: var(--color-muted);
+    }
+
+    .purchase-meta-value {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .purchase-main-action {
+      margin-bottom: 8px;
+    }
+
+    .purchase-note {
+      font-size: 11px;
+      color: var(--color-muted);
+      margin-bottom: 4px;
+    }
+
+    .purchase-disclaimer {
+      font-size: 10px;
+      color: var(--color-muted);
+    }
+
+    /* 講師情報 */
+
+    .instructor-section {
+      margin-top: 24px;
+      background: var(--color-surface);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .instructor-header {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .instructor-body {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr);
+      gap: 16px;
+      font-size: 13px;
+    }
+
+    .instructor-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ffe5ef, #ffffff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+    }
+
+    .instructor-name {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .instructor-title {
+      font-size: 12px;
+      color: var(--color-muted);
+      margin-bottom: 6px;
+    }
+
+    .instructor-profile {
+      font-size: 13px;
+      color: var(--color-text);
+    }
+
+    /* カリキュラム */
+
+    .curriculum-section {
+      margin-top: 24px;
+    }
+
+    .curriculum-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .curriculum-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .curriculum-sub {
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+
+    .lesson-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 13px;
+    }
+
+    .lesson-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 10px;
+      background: var(--color-surface);
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      margin-bottom: 6px;
+    }
+
+    .lesson-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lesson-index {
+      font-size: 11px;
+      color: var(--color-muted);
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #f5f5fa;
+    }
+
+    .lesson-title {
+      font-weight: 500;
+    }
+
+    .lesson-meta {
+      font-size: 11px;
+      color: var(--color-muted);
+      text-align: right;
+    }
+
+    .lesson-free-chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: #e3f7ff;
+      color: #0077b6;
+      border: 1px solid #c4ebff;
+    }
+
+    /* 共通フッター（LAYOUT001） */
+
+    .footer {
+      margin-top: 24px;
+      border-top: 1px solid #e5e5ee;
+      background: #ffffff;
+    }
+
+    .footer-inner {
+      padding: 16px 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--color-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--color-muted);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-primary);
+    }
+
+    /* レスポンシブ */
+
+    @media (max-width: 960px) {
+      .course-detail-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .course-aside {
+        position: static;
+      }
+      .instructor-body {
+        grid-template-columns: 64px minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .header-inner {
+        height: 56px;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 56px;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-bottom: 1px solid #eeeeee;
+        flex-direction: column;
+        padding: 8px 16px 12px;
+        display: none;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav {
+        gap: 0;
+      }
+
+      .nav-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .course-main {
+        padding: 16px;
+      }
+
+      .instructor-section {
+        padding: 14px 14px;
+      }
+
+      .lesson-item {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: flex-start;
+      }
+
+      .lesson-meta {
+        text-align: left;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- 共通ヘッダー -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="header-left">
+        <a href="/" class="logo" aria-label="ホームへ">
+          <span>B</span>
+        </a>
+        <div class="service-name">美容オンラインアカデミー</div>
+      </div>
+
+      <nav class="nav">
+        <div class="nav-links" id="navLinks">
+          <a href="/courses" class="nav-link">講座一覧</a>
+          <a href="/about" class="nav-link">サービス紹介</a>
+          <div class="nav-actions">
+            <!-- 未ログイン時想定のサンプル -->
+            <a href="/login" class="btn btn-secondary">ログイン</a>
+            <a href="/signup" class="btn btn-primary">会員登録</a>
+          </div>
+        </div>
+        <button class="nav-toggle" type="button" aria-label="メニューを開く" onclick="toggleMenu()">
+          <span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="course-detail">
+      <div class="container">
+
+        <!-- パンくず -->
+        <nav class="breadcrumb" aria-label="パンくずリスト">
+          <a href="/">TOP</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="/courses?category=cut">カット</a>
+          <span class="breadcrumb-sep">›</span>
+          <span>ショートカット設計の基礎と応用</span>
+        </nav>
+
+        <div class="course-detail-layout">
+          <!-- 左カラム：講座情報 -->
+          <article class="course-main">
+            <div class="course-meta-row">
+              <span class="tag">カテゴリ：カット</span>
+              <span class="tag tag-level">レベル：中級</span>
+              <span>全8本・合計 90分</span>
+            </div>
+
+            <h1 class="course-title">ショートカット設計の基礎と応用</h1>
+            <div class="course-subtitle">
+              サロンワークでそのまま使える、骨格・クセに合わせたショートカット設計の考え方を体系的に学ぶ講座です。
+            </div>
+
+            <!-- 概要 -->
+            <div class="section-block">
+              <div class="section-block-title">講座概要</div>
+              <div class="section-block-body">
+                <p>
+                  ショートカットを提案したいが、「スタイルが安定しない」「再現性に不安がある」と感じているスタイリスト向けの講座です。<br />
+                  基本のブロッキングから、骨格・毛量・生えグセを踏まえた設計の手順、サロンワークでのタイムコントロールまで、現場目線で解説します。
+                </p>
+              </div>
+            </div>
+
+            <!-- 学べること -->
+            <div class="section-block">
+              <div class="section-block-title">この講座で学べること</div>
+              <div class="section-block-body">
+                <ul>
+                  <li>ショートカットにおける骨格・顔型の基本的な見立て方</li>
+                  <li>ベースカットと質感調整の役割分担と、失敗しづらい手順設計</li>
+                  <li>お客様のライフスタイルに合わせたカウンセリングと提案トーク</li>
+                  <li>サロンワークの施術時間を意識したタイムマネジメントのコツ</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 対象者／前提スキル -->
+            <div class="section-block">
+              <div class="section-block-title">対象者・前提スキル</div>
+              <div class="section-block-body">
+                <p class="label-inline">こんな方におすすめ</p>
+                <ul>
+                  <li>デビュー〜5年目程度のスタイリストの方</li>
+                  <li>ショート提案を増やしたいが、似合わせに自信が持てない方</li>
+                  <li>サロン全体でカットクオリティの底上げをしたい店長・教育担当の方</li>
+                </ul>
+                <p class="label-inline">前提となるスキル</p>
+                <ul>
+                  <li>ワンレングス／グラデーションカットなど、基礎的なカット技術</li>
+                  <li>サロンワークでのカット入客経験（モデルカットを含む）</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- キーワード（任意） -->
+            <div class="section-block">
+              <div class="section-block-title">キーワード（参考）</div>
+              <div class="section-block-body">
+                <div class="pill-list">
+                  <span class="pill">#ショートボブ</span>
+                  <span class="pill">#耳掛けショート</span>
+                  <span class="pill">#骨格補正</span>
+                  <span class="pill">#カウンセリング</span>
+                  <span class="pill">#サロン教育</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 右カラム：購入ボックス -->
+          <aside class="course-aside" aria-label="購入情報">
+            <div class="purchase-box">
+              <div class="purchase-price-row">
+                <div>
+                  <div class="purchase-price">¥9,800</div>
+                  <div class="purchase-tax">税込・買い切り</div>
+                </div>
+                <span class="btn-muted">サンプル表示</span>
+              </div>
+
+              <div class="purchase-meta">
+                <div>
+                  <div class="purchase-meta-label">視聴期限</div>
+                  <div class="purchase-meta-value">無期限（想定）</div>
+                </div>
+                <div>
+                  <div class="purchase-meta-label">総再生時間</div>
+                  <div class="purchase-meta-value">約 90 分</div>
+                </div>
+                <div>
+                  <div class="purchase-meta-label">動画本数</div>
+                  <div class="purchase-meta-value">全 8 本</div>
+                </div>
+                <div>
+                  <div class="purchase-meta-label">プレビュー</div>
+                  <div class="purchase-meta-value">第1話 無料視聴可</div>
+                </div>
+              </div>
+
+              <div class="purchase-main-action">
+                <button type="button" class="btn btn-primary" style="width: 100%;">
+                  ログインして購入手続きへ
+                </button>
+              </div>
+
+              <div class="purchase-note">
+                ※ サンプル画面のため、実際の決済は行われません。
+              </div>
+              <div class="purchase-disclaimer">
+                本番実装では、ログイン済みの場合はそのまま決済フローへ、未ログインの場合はログイン画面を表示してから決済画面へ遷移させます。
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- 講師情報 -->
+        <section class="instructor-section" aria-labelledby="instructor-heading">
+          <div class="instructor-header" id="instructor-heading">講師情報</div>
+          <div class="instructor-body">
+            <div class="instructor-avatar">
+              Y
+            </div>
+            <div>
+              <div class="instructor-name">山田 一郎</div>
+              <div class="instructor-title">表参道 / ショートカット特化サロン ディレクター</div>
+              <div class="instructor-profile">
+                都内2店舗を経て現サロンに参加。ショート・ボブ比率80％超のスタイリストとして、年間1,000名以上のショートカットを担当。<br />
+                サロンワークだけでなく、メーカーセミナー講師や社内教育も担当しており、「明日から現場で使える再現性の高い技術解説」に定評がある。
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- カリキュラム一覧 -->
+        <section class="curriculum-section" aria-labelledby="curriculum-heading">
+          <div class="curriculum-header">
+            <div>
+              <div class="curriculum-title" id="curriculum-heading">カリキュラム（全8本 / 約90分）</div>
+              <div class="curriculum-sub">※ 時間・構成はサンプルです。実際の講座に合わせて変更可能です。</div>
+            </div>
+          </div>
+
+          <ol class="lesson-list">
+            <li class="lesson-item">
+              <div class="lesson-title-row">
+                <span class="lesson-index">#01</span>
+                <div class="lesson-title">ショートカットにおける骨格・顔型の捉え方</div>
+              </div>
+              <div class="lesson-meta">12分</div>
+              <button type="button" class="btn btn-muted">無料プレビュー</button>
+            </li>
+            <li class="lesson-item">
+              <div class="lesson-title-row">
+                <span class="lesson-index">#02</span>
+                <div class="lesson-title">ベースカット設計：ブロッキングとガイドの作り方</div>
+              </div>
+              <div class="lesson-meta">15分</div>
+              <span class="lesson-free-chip">有料パート</span>
+            </li>
+            <li class="lesson-item">
+              <div class="lesson-title-row">
+                <span class="lesson-index">#03</span>
+                <div class="lesson-title">アウトラインとウエイトコントロール</div>
+              </div>
+              <div class="lesson-meta">14分</div>
+              <span class="lesson-free-chip">有料パート</span>
+            </li>
+            <li class="lesson-item">
+              <div class="lesson-title-row">
+                <span class="lesson-index">#04</span>
+                <div class="lesson-title">質感調整と似合わせのバリエーション</div>
+              </div>
+              <div class="lesson-meta">11分</div>
+              <span class="lesson-free-chip">有料パート</span>
+            </li>
+            <li class="lesson-item">
+              <div class="lesson-title-row">
+                <span class="lesson-index">#05</span>
+                <div class="lesson-title">生えグセ・毛量に応じた設計の微調整</div>
+              </div>
+              <div class="lesson-meta">10分</div>
+              <span class="lesson-free-chip">有料パート</span>
+            </li>
+            <li class="lesson-item">
+              <div class="lesson-title-row">
+                <span class="lesson-index">#06</span>
+                <div class="lesson-title">カウンセリング〜提案トークの組み立て方</div>
+              </div>
+              <div class="lesson-meta">8分</div>
+              <span class="lesson-free-chip">有料パート</span>
+            </li>
+            <li class="lesson-item">
+              <div class="lesson-title-row">
+                <span class="lesson-index">#07</span>
+                <div class="lesson-title">サロンワークでのタイムコントロール実例</div>
+              </div>
+              <div class="lesson-meta">10分</div>
+              <span class="lesson-free-chip">有料パート</span>
+            </li>
+            <li class="lesson-item">
+              <div class="lesson-title-row">
+                <span class="lesson-index">#08</span>
+                <div class="lesson-title">モデル施術デモ：カウンセリング〜仕上がりまで</div>
+              </div>
+              <div class="lesson-meta">10分</div>
+              <span class="lesson-free-chip">有料パート</span>
+            </li>
+          </ol>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- 共通フッター -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>© 2025 Beauty Online Academy Inc.</div>
+      <div class="footer-links">
+        <a href="/terms">利用規約</a>
+        <a href="/privacy">プライバシーポリシー</a>
+        <a href="/tokusho">特定商取引法に基づく表記</a>
+        <a href="/contact">お問い合わせ</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  function toggleMenu() {
+    var nav = document.getElementById("navLinks");
+    if (nav) {
+      nav.classList.toggle("open");
+    }
+  }
+</script>
+</body>
+</html>

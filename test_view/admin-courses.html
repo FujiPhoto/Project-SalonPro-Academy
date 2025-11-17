@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>講座・動画管理 | 美容オンラインアカデミー 管理画面</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --color-bg: #f4f5fb;
+      --color-surface: #ffffff;
+      --color-primary: #e91e63;
+      --color-primary-dark: #c2185b;
+      --color-accent: #3f51b5;
+      --color-text: #333333;
+      --color-muted: #777777;
+      --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --radius-lg: 12px;
+      --radius-full: 999px;
+      --max-width: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .page-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main { flex: 1; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid transparent;
+      font-size: 13px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--color-text);
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease, transform 0.05s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+    }
+
+    .btn-secondary {
+      border-color: #dddddd;
+      background: #ffffff;
+    }
+
+    .btn-muted {
+      border-color: #e0e0e7;
+      background: #f5f5fa;
+      color: var(--color-muted);
+      font-size: 12px;
+      padding: 6px 10px;
+    }
+
+    .btn-ghost {
+      border-color: transparent;
+      background: transparent;
+      color: var(--color-muted);
+      padding: 6px 6px;
+      font-size: 12px;
+    }
+
+    .btn-icon {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    /* 管理用ヘッダー（admin-dashboardと同系） */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #1f2230;
+      color: #ffffff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .header-inner {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-admin {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .service-name {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .service-badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .header-username {
+      opacity: 0.9;
+    }
+
+    .header-role {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-logout {
+      border-color: rgba(255, 255, 255, 0.5);
+      color: #ffffff;
+      background: transparent;
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* ページヘッダ */
+
+    .page-header {
+      padding: 16px 0 8px;
+    }
+
+    .breadcrumb {
+      font-size: 11px;
+      color: var(--color-muted);
+      margin-bottom: 4px;
+    }
+
+    .breadcrumb a {
+      color: var(--color-muted);
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .breadcrumb-sep {
+      margin: 0 4px;
+    }
+
+    .page-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .page-sub {
+      font-size: 12px;
+      color: var(--color-muted);
+    }
+
+    /* カード共通 */
+
+    .card {
+      background: var(--color-surface);
+      border-radius: 14px;
+      padding: 12px 14px 12px;
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .card-sub {
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+
+    /* 検索カード（上部） */
+
+    .search-section {
+      padding: 4px 0 12px;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 12px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+
+    .form-control {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #d4d4e0;
+      font-size: 13px;
+      background: #ffffff;
+    }
+
+    .search-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    /* メイン2カラム：左 講座一覧／右 講座編集フォーム */
+
+    .manage-layout {
+      padding-bottom: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.7fr);
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .course-table {
+      width: 100%;
+      font-size: 12px;
+    }
+
+    .course-table th,
+    .course-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #f0f0f5;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .course-table th {
+      font-size: 11px;
+      color: var(--color-muted);
+      background: #fafafe;
+    }
+
+    .course-table tbody tr {
+      cursor: pointer;
+    }
+
+    .course-table tbody tr:hover {
+      background: #fafafa;
+    }
+
+    .course-table tbody tr.is-selected {
+      background: #fff0f6;
+    }
+
+    .col-course-id { width: 70px; }
+    .col-course-name { min-width: 180px; }
+    .col-category { width: 100px; }
+    .col-price { width: 90px; text-align: right; }
+    .col-status { width: 70px; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+    }
+
+    .status-public {
+      background: #e3ffe7;
+      color: #2e7d32;
+      border: 1px solid #b5f0c2;
+    }
+
+    .status-private {
+      background: #f3f3f7;
+      color: #555;
+      border: 1px solid #dddddd;
+    }
+
+    .badge-small {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      background: #f5f5fa;
+      color: var(--color-muted);
+    }
+
+    /* 右：講座編集フォーム */
+
+    .course-edit-form {
+      display: grid;
+      gap: 8px;
+    }
+
+    .course-edit-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    .form-control-inline {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+    }
+
+    .form-control-inline input {
+      width: 120px;
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+
+    .form-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .error-message {
+      font-size: 11px;
+      color: #c62828;
+    }
+
+    /* 下部：動画管理エリア */
+
+    .video-section {
+      padding-bottom: 20px;
+    }
+
+    .video-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1.3fr);
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .video-table {
+      width: 100%;
+      font-size: 12px;
+    }
+
+    .video-table th,
+    .video-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #f0f0f5;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .video-table th {
+      font-size: 11px;
+      color: var(--color-muted);
+      background: #fafafe;
+    }
+
+    .col-video-id { width: 70px; }
+    .col-video-title { min-width: 180px; }
+    .col-video-duration { width: 80px; }
+    .col-video-sort { width: 70px; }
+    .col-video-actions { width: 90px; }
+
+    .drag-handle {
+      font-size: 14px;
+      cursor: move;
+      opacity: 0.6;
+      margin-right: 4px;
+    }
+
+    .video-note {
+      font-size: 11px;
+      color: var(--color-muted);
+      margin-top: 4px;
+    }
+
+    .video-side-note {
+      font-size: 12px;
+      color: var(--color-muted);
+      line-height: 1.5;
+    }
+
+    /* 簡易モーダル（動画編集フォーム） */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .modal {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      max-width: 520px;
+      width: calc(100% - 32px);
+      padding: 14px 16px 14px;
+      font-size: 13px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .modal-body {
+      display: grid;
+      gap: 8px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    /* フッター */
+
+    .footer {
+      margin-top: 24px;
+      border-top: 1px solid #e0e0ea;
+      background: #ffffff;
+    }
+
+    .footer-inner {
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: var(--color-muted);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-primary);
+    }
+
+    /* レスポンシブ */
+
+    @media (max-width: 960px) {
+      .search-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .manage-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .video-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .search-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .header-inner {
+        height: 52px;
+        font-size: 13px;
+      }
+      .page-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .card {
+        padding: 10px 10px;
+      }
+      .footer-inner {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- 管理ヘッダー -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="header-left">
+        <div class="logo-admin">B</div>
+        <div>
+          <div class="service-name">美容オンラインアカデミー 管理画面</div>
+          <div class="service-badge">Course & Video Management</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="header-username">admin@example.com</span>
+        <span class="header-role">ロール：管理者（R001）</span>
+        <button type="button" class="btn btn-logout">ログアウト</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- ページヘッダ -->
+      <section class="page-header">
+        <div class="breadcrumb" aria-label="パンくずリスト">
+          <a href="/admin/dashboard">管理トップ</a>
+          <span class="breadcrumb-sep">›</span>
+          <span>講座・動画管理</span>
+        </div>
+        <div class="page-title-row">
+          <div>
+            <h1 class="page-title">講座・動画管理</h1>
+            <p class="page-sub">
+              講座の検索・一覧・登録／編集、および紐づく動画（カリキュラム）の管理を行う画面のサンプルです。
+            </p>
+          </div>
+          <button type="button" class="btn btn-muted">
+            権限：管理者／運営担当向け
+          </button>
+        </div>
+      </section>
+
+      <!-- 検索条件エリア（F301 / API301） -->
+      <section class="search-section">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">検索条件</div>
+              <div class="card-sub">
+                講座名・カテゴリ・公開状態で絞り込み可能です（サンプルのため実検索は行いません）。
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="btnNewCourse">
+              新規講座登録
+            </button>
+          </div>
+          <div class="search-grid">
+            <div class="form-field">
+              <label class="form-label" for="searchName">講座名（部分一致）</label>
+              <input id="searchName" class="form-control" type="text" placeholder="例：ショートカット" />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="searchCategory">カテゴリ</label>
+              <select id="searchCategory" class="form-control">
+                <option value="">すべて</option>
+                <option value="cut">カット</option>
+                <option value="color">カラー</option>
+                <option value="perm">パーマ</option>
+                <option value="other">その他</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="searchStatus">公開状態</label>
+              <select id="searchStatus" class="form-control">
+                <option value="">すべて</option>
+                <option value="public">公開</option>
+                <option value="private">非公開</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">&nbsp;</label>
+              <div class="search-actions">
+                <button type="button" class="btn btn-secondary" id="btnClearSearch">
+                  クリア
+                </button>
+                <button type="button" class="btn btn-primary" id="btnSearch">
+                  検索
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 中央：左 講座一覧／右 講座編集フォーム（F301/F302） -->
+      <section class="manage-layout">
+        <!-- 左：講座一覧 -->
+        <section class="card" aria-label="講座一覧">
+          <div class="card-header">
+            <div>
+              <div class="card-title">講座一覧</div>
+              <div class="card-sub">
+                検索結果の講座が表示されます。行クリックで右側の編集フォームに読み込みます。
+              </div>
+            </div>
+            <span class="badge-small">サンプル：3件表示</span>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="course-table" id="courseTable">
+              <thead>
+              <tr>
+                <th class="col-course-id">講座ID</th>
+                <th class="col-course-name">講座名</th>
+                <th class="col-category">カテゴリ</th>
+                <th class="col-price">価格</th>
+                <th class="col-status">公開状態</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr data-course-id="C001" class="is-selected">
+                <td>C001</td>
+                <td>ショートカット設計の基礎と応用</td>
+                <td>カット</td>
+                <td class="col-price">¥9,800</td>
+                <td>
+                  <span class="status-pill status-public">公開</span>
+                </td>
+              </tr>
+              <tr data-course-id="C002">
+                <td>C002</td>
+                <td>ダメージを抑えるブリーチ＆オンカラー設計</td>
+                <td>カラー</td>
+                <td class="col-price">¥12,800</td>
+                <td>
+                  <span class="status-pill status-public">公開</span>
+                </td>
+              </tr>
+              <tr data-course-id="C003">
+                <td>C003</td>
+                <td>サロン売上アップのためのカウンセリング術</td>
+                <td>その他</td>
+                <td class="col-price">¥7,800</td>
+                <td>
+                  <span class="status-pill status-private">非公開</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 右：講座編集フォーム -->
+        <section class="card" aria-label="講座編集">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                講座編集フォーム
+              </div>
+              <div class="card-sub">
+                選択した講座の基本情報を編集します。「講座保存」でAPI303（save_course）を呼ぶ想定です。
+              </div>
+            </div>
+            <span class="badge-small" id="selectedCourseIdLabel">
+              選択中：C001
+            </span>
+          </div>
+
+          <div class="course-edit-form">
+            <div class="course-edit-grid">
+              <div class="form-field">
+                <label class="form-label" for="courseTitle">講座タイトル<span style="color:#c62828;">*</span></label>
+                <input id="courseTitle" class="form-control" type="text"
+                       value="ショートカット設計の基礎と応用" />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="courseSubtitle">サブタイトル</label>
+                <input id="courseSubtitle" class="form-control" type="text"
+                       value="骨格・クセに合わせたショート設計を体系的に学ぶ" />
+              </div>
+            </div>
+
+            <div class="course-edit-grid">
+              <div class="form-field">
+                <label class="form-label" for="courseCategory">カテゴリ<span style="color:#c62828;">*</span></label>
+                <select id="courseCategory" class="form-control">
+                  <option value="cut" selected>カット</option>
+                  <option value="color">カラー</option>
+                  <option value="perm">パーマ</option>
+                  <option value="other">その他</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="coursePrice">価格（税込）<span style="color:#c62828;">*</span></label>
+                <div class="form-control-inline">
+                  <input id="coursePrice" class="form-control" type="number" min="0" value="9800" />
+                  <span class="form-hint">円</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="course-edit-grid">
+              <div class="form-field">
+                <label class="form-label" for="courseStatus">公開状態<span style="color:#c62828;">*</span></label>
+                <select id="courseStatus" class="form-control">
+                  <option value="public" selected>公開</option>
+                  <option value="private">非公開</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">その他</label>
+                <div class="form-hint">
+                  本番実装では「講座説明」「タグ」「表示順」などの項目を追加可能です。
+                </div>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <div class="error-message" id="courseErrorArea">
+                <!-- MSG301/302などのバリデーションメッセージ表示想定（サンプルでは未使用） -->
+              </div>
+              <div>
+                <button type="button" class="btn btn-secondary" id="btnCourseCancel">
+                  変更を破棄
+                </button>
+                <button type="button" class="btn btn-primary" id="btnCourseSave">
+                  講座保存
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- 下部：動画管理エリア（F303〜F305） -->
+      <section class="video-section">
+        <div class="video-layout">
+
+          <!-- 左：動画一覧／並び順 -->
+          <section class="card" aria-label="動画一覧">
+            <div class="card-header">
+              <div>
+                <div class="card-title" id="videoSectionTitle">
+                  動画一覧（ショートカット設計の基礎と応用）
+                </div>
+                <div class="card-sub">
+                  選択中の講座に紐づく動画（カリキュラム）を表示します。ドラッグ＆ドロップで並び替えた後、「並び順保存」でAPI306を呼ぶ想定です。
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary" id="btnNewVideo">
+                新規動画追加
+              </button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="video-table" id="videoTable">
+                <thead>
+                <tr>
+                  <th class="col-video-id">動画ID</th>
+                  <th class="col-video-title">動画タイトル</th>
+                  <th class="col-video-duration">再生時間</th>
+                  <th class="col-video-sort">並び順</th>
+                  <th class="col-video-actions">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- C001 のダミー -->
+                <tr data-video-id="V001">
+                  <td>V001</td>
+                  <td><span class="drag-handle">☰</span>骨格・顔型の捉え方</td>
+                  <td>12分</td>
+                  <td>1</td>
+                  <td>
+                    <button type="button" class="btn btn-muted btn-icon" data-edit-video="V001">
+                      編集
+                    </button>
+                  </td>
+                </tr>
+                <tr data-video-id="V002">
+                  <td>V002</td>
+                  <td><span class="drag-handle">☰</span>ベースカット設計：ブロッキングとガイド</td>
+                  <td>15分</td>
+                  <td>2</td>
+                  <td>
+                    <button type="button" class="btn btn-muted btn-icon" data-edit-video="V002">
+                      編集
+                    </button>
+                  </td>
+                </tr>
+                <tr data-video-id="V003">
+                  <td>V003</td>
+                  <td><span class="drag-handle">☰</span>アウトラインとウエイトコントロール</td>
+                  <td>14分</td>
+                  <td>3</td>
+                  <td>
+                    <button type="button" class="btn btn-muted btn-icon" data-edit-video="V003">
+                      編集
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="form-footer" style="margin-top:8px;">
+              <div class="video-note">
+                ※ 並び順は小さい数値ほど上に表示されます。サンプルのため、実際の順序保存処理は行いません。
+              </div>
+              <button type="button" class="btn btn-primary" id="btnSortSave">
+                並び順保存
+              </button>
+            </div>
+          </section>
+
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- フッター（管理画面用簡易版） -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>© 2025 Beauty Online Academy Admin Console</div>
+      <div class="footer-links">
+        <a href="/admin/system-info">システム情報</a>
+        <a href="/admin/audit-log">監査ログ</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- 動画編集モーダル（UI312） -->
+<div class="modal-backdrop" id="videoModalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <div class="modal-title" id="videoModalTitle">動画の新規登録</div>
+      <button type="button" class="btn btn-ghost" id="btnVideoModalClose">
+        閉じる
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" for="videoTitle">動画タイトル<span style="color:#c62828;">*</span></label>
+        <input id="videoTitle" class="form-control" type="text" placeholder="例：骨格・顔型の捉え方" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="videoDescription">説明文</label>
+        <textarea id="videoDescription" class="form-control" rows="3"
+                  placeholder="動画の内容やポイントを簡潔に記載します。"></textarea>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="videoUrl">動画URL（またはストレージキー）<span style="color:#c62828;">*</span></label>
+        <input id="videoUrl" class="form-control" type="text"
+               placeholder="例：https://example.com/videos/xxxx" />
+      </div>
+      <div class="course-edit-grid">
+        <div class="form-field">
+          <label class="form-label" for="videoDuration">再生時間（分）<span style="color:#c62828;">*</span></label>
+          <input id="videoDuration" class="form-control" type="number" min="0" placeholder="例：12" />
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="videoSortOrder">並び順</label>
+          <input id="videoSortOrder" class="form-control" type="number" min="1" placeholder="例：1" />
+        </div>
+      </div>
+      <div class="form-hint">
+        ※ サンプルのため、入力チェックやAPI連携（API305）は行いません。実装時はMSG303〜MSG304のメッセージを使用します。
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" id="btnVideoModalCancel">
+        キャンセル
+      </button>
+      <button type="button" class="btn btn-primary" id="btnVideoModalSave">
+        動画保存
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ダミーデータ（course_idごとの情報）: 実装時はAPI301/302/304のレスポンスに置き換え
+  const COURSE_DATA = {
+    C001: {
+      id: "C001",
+      title: "ショートカット設計の基礎と応用",
+      subtitle: "骨格・クセに合わせたショート設計を体系的に学ぶ",
+      category: "cut",
+      price: 9800,
+      status: "public"
+    },
+    C002: {
+      id: "C002",
+      title: "ダメージを抑えるブリーチ＆オンカラー設計",
+      subtitle: "ケミカルダメージを最小限に抑えたブリーチ設計",
+      category: "color",
+      price: 12800,
+      status: "public"
+    },
+    C003: {
+      id: "C003",
+      title: "サロン売上アップのためのカウンセリング術",
+      subtitle: "リピート・単価UPにつながるカウンセリングの型",
+      category: "other",
+      price: 7800,
+      status: "private"
+    }
+  };
+
+  const VIDEO_DATA = {
+    C001: [
+      { id: "V001", title: "骨格・顔型の捉え方", duration: "12分", sort: 1 },
+      { id: "V002", title: "ベースカット設計：ブロッキングとガイド", duration: "15分", sort: 2 },
+      { id: "V003", title: "アウトラインとウエイトコントロール", duration: "14分", sort: 3 }
+    ],
+    C002: [
+      { id: "V101", title: "ブリーチ設計の考え方", duration: "18分", sort: 1 },
+      { id: "V102", title: "オンカラーの配合と塗布順", duration: "16分", sort: 2 }
+    ],
+    C003: [
+      { id: "V201", title: "ファーストカウンセリングの基本", duration: "10分", sort: 1 }
+    ]
+  };
+
+  const courseTable = document.getElementById("courseTable");
+  const videoTable = document.getElementById("videoTable");
+  const selectedCourseIdLabel = document.getElementById("selectedCourseIdLabel");
+  const videoSectionTitle = document.getElementById("videoSectionTitle");
+
+  const courseTitleInput = document.getElementById("courseTitle");
+  const courseSubtitleInput = document.getElementById("courseSubtitle");
+  const courseCategorySelect = document.getElementById("courseCategory");
+  const coursePriceInput = document.getElementById("coursePrice");
+  const courseStatusSelect = document.getElementById("courseStatus");
+
+  function renderCourseToForm(courseId) {
+    const data = COURSE_DATA[courseId];
+    if (!data) return;
+    selectedCourseIdLabel.textContent = "選択中：" + data.id;
+    courseTitleInput.value = data.title;
+    courseSubtitleInput.value = data.subtitle;
+    courseCategorySelect.value = data.category;
+    coursePriceInput.value = data.price;
+    courseStatusSelect.value = data.status;
+    videoSectionTitle.textContent = "動画一覧（" + data.title + "）";
+  }
+
+  function renderVideosForCourse(courseId) {
+    const list = VIDEO_DATA[courseId] || [];
+    const tbody = videoTable.querySelector("tbody");
+    tbody.innerHTML = "";
+    list
+      .slice()
+      .sort((a, b) => a.sort - b.sort)
+      .forEach((v) => {
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-video-id", v.id);
+        tr.innerHTML =
+          '<td>' + v.id + "</td>" +
+          '<td><span class="drag-handle">☰</span>' + v.title + "</td>" +
+          "<td>" + v.duration + "</td>" +
+          "<td>" + v.sort + "</td>" +
+          '<td><button type="button" class="btn btn-muted btn-icon" data-edit-video="' + v.id + '">編集</button></td>';
+        tbody.appendChild(tr);
+      });
+  }
+
+  // 初期表示（C001）
+  renderCourseToForm("C001");
+  renderVideosForCourse("C001");
+
+  // 講座行クリックで切替（EVT303/306イメージ）
+  if (courseTable) {
+    courseTable.addEventListener("click", function (e) {
+      const row = e.target.closest("tr[data-course-id]");
+      if (!row) return;
+      const courseId = row.getAttribute("data-course-id");
+      courseTable.querySelectorAll("tbody tr").forEach((tr) => {
+        tr.classList.toggle("is-selected", tr === row);
+      });
+      renderCourseToForm(courseId);
+      renderVideosForCourse(courseId);
+    });
+  }
+
+  // 講座保存ボタン（EVT305）: サンプルなのでアラートのみ
+  document.getElementById("btnCourseSave").addEventListener("click", function () {
+    const currentId = selectedCourseIdLabel.textContent.replace("選択中：", "").trim();
+    alert("講座情報を保存する想定（API303: save_course）。\n\ncourse_id=" + currentId);
+  });
+
+  document.getElementById("btnCourseCancel").addEventListener("click", function () {
+    const currentId = selectedCourseIdLabel.textContent.replace("選択中：", "").trim();
+    renderCourseToForm(currentId);
+    alert("入力内容を破棄し、選択中の講座情報を再読込しました。");
+  });
+
+  // 検索＆クリア（EVT301/302イメージ）
+  document.getElementById("btnSearch").addEventListener("click", function () {
+    alert("検索条件に基づき講座一覧取得する想定（API301: search_courses）。\n\nサンプルのため画面上は変化しません。");
+  });
+
+  document.getElementById("btnClearSearch").addEventListener("click", function () {
+    document.getElementById("searchName").value = "";
+    document.getElementById("searchCategory").value = "";
+    document.getElementById("searchStatus").value = "";
+  });
+
+  // 新規講座登録（EVT304）
+  document.getElementById("btnNewCourse").addEventListener("click", function () {
+    selectedCourseIdLabel.textContent = "新規登録（未採番）";
+    courseTitleInput.value = "";
+    courseSubtitleInput.value = "";
+    courseCategorySelect.value = "";
+    coursePriceInput.value = "";
+    courseStatusSelect.value = "private";
+    videoSectionTitle.textContent = "動画一覧（新規講座：動画未登録）";
+    videoTable.querySelector("tbody").innerHTML = "";
+  });
+
+  // 並び順保存（EVT309）
+  document.getElementById("btnSortSave").addEventListener("click", function () {
+    const currentId = selectedCourseIdLabel.textContent.replace("選択中：", "").trim();
+    alert("動画の並び順を保存する想定（API306: update_video_order）。\n\ncourse_id=" + currentId);
+  });
+
+  // 動画モーダル（EVT307/308）簡易実装
+  const modalBackdrop = document.getElementById("videoModalBackdrop");
+  const modalTitle = document.getElementById("videoModalTitle");
+  const videoTitleInput = document.getElementById("videoTitle");
+  const videoDescInput = document.getElementById("videoDescription");
+  const videoUrlInput = document.getElementById("videoUrl");
+  const videoDurationInput = document.getElementById("videoDuration");
+  const videoSortInput = document.getElementById("videoSortOrder");
+
+  function openVideoModal(mode, videoId) {
+    if (mode === "new") {
+      modalTitle.textContent = "動画の新規登録";
+      videoTitleInput.value = "";
+      videoDescInput.value = "";
+      videoUrlInput.value = "";
+      videoDurationInput.value = "";
+      videoSortInput.value = "";
+    } else {
+      modalTitle.textContent = "動画の編集（" + videoId + "）";
+      // サンプルとして、既存テーブルの1行目の情報を軽く流用しておく
+      const row = document.querySelector('tr[data-video-id="' + videoId + '"]');
+      if (row) {
+        const cells = row.querySelectorAll("td");
+        videoTitleInput.value = cells[1].innerText.replace("☰", "").trim();
+        videoDurationInput.value = (cells[2].innerText || "").replace("分", "");
+        videoSortInput.value = cells[3].innerText;
+      }
+      videoDescInput.value = "";
+      videoUrlInput.value = "";
+    }
+    modalBackdrop.classList.add("is-open");
+  }
+
+  function closeVideoModal() {
+    modalBackdrop.classList.remove("is-open");
+  }
+
+  document.getElementById("btnNewVideo").addEventListener("click", function () {
+    openVideoModal("new");
+  });
+
+  videoTable.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-edit-video]");
+    if (!btn) return;
+    const videoId = btn.getAttribute("data-edit-video");
+    openVideoModal("edit", videoId);
+  });
+
+  document.getElementById("btnVideoModalClose").addEventListener("click", closeVideoModal);
+  document.getElementById("btnVideoModalCancel").addEventListener("click", closeVideoModal);
+  document.getElementById("btnVideoModalSave").addEventListener("click", function () {
+    alert("動画情報を保存する想定（API305: save_video）。\n\nサンプルのため保存処理は行いません。");
+    closeVideoModal();
+  });
+
+</script>
+</body>
+</html>
